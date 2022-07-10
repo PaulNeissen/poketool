@@ -30,7 +30,7 @@ export class TypeService {
   }
 
   getTypeImgFromName(type) {
-    return '../../assets/symbols/type-' + type + '-32px.png';
+    return 'assets/symbols/type-' + type + '-32px.png';
   }
 
   initType() {

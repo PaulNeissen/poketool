@@ -96,7 +96,7 @@ export class SideBarTeamComponent implements OnInit {
   getImgStyle(pokemon) {
     const height = (pokemon.id % 12) * 40;
     const width =  Math.floor(pokemon.id / 12) * 30;
-    return "background:transparent url(../../assets/pokemonicons-sheet.png) no-repeat scroll -" 
+    return "background:transparent url(assets/pokemonicons-sheet.png) no-repeat scroll -" 
       + height.toString() + "px -" + width.toString() + "px";
   }
 

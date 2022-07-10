@@ -29,7 +29,7 @@ export class TeamBuilderComponent implements OnInit {
     const y = pokemon.id < 10000 ? pokemon.id % 12 : coord!.x;
     const width =  x * 30;
     const height = y * 40;
-    return "background:transparent url(../../assets/pokemonicons-sheet.png) no-repeat scroll -" 
+    return "background:transparent url(assets/pokemonicons-sheet.png) no-repeat scroll -" 
       + height.toString() + "px -" + width.toString() + "px";
   }
 
