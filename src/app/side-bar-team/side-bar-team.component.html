@@ -1,0 +1,41 @@
+<div *ngIf="team">
+  <div >Team's types: </div>
+  <div class="type-container" fxLayout="row" fxLayoutAlign="start center">
+    <div *ngFor="let type of multipleTypes">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <img [src]="getTypeSrc(type.types[0])">
+        <span class="small-text">x{{ type.number }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div >Defensive coverage: </div>
+  <table>  
+    <thead>
+      <tr>
+        <th></th>
+        <th scope="col" *ngFor="let type of getTypes()">  
+          <img class="type-img" [src]="getTypeSrcFromName(type)"> 
+        </th>  
+      </tr>  
+    </thead>  
+    <tbody>  
+      <tr *ngFor="let pokemon of team"> 
+        <td align="center">
+          <div class="avatar-container">
+            <span class="avatar" [style]="getImgStyle(pokemon)"></span>
+          </div>
+        </td> 
+        <td *ngFor="let resistance of getResistances(pokemon)" align="center" class="cell"
+          [ngClass]="{'grey-cell': resistance === 0, 
+                      'very-green-cell': resistance === 25,
+                      'green-cell': resistance === 50, 
+                      'red-cell': resistance === 200, 
+                      'very-red-cell': resistance === 400}">
+          {{ getMultiplier(resistance) }}
+        </td>  
+      </tr>  
+    </tbody>  
+  </table> 
+
+</div>

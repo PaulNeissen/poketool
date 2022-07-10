@@ -1,0 +1,138 @@
+@import '../../styles/variables.less';
+
+.drawer-container {
+  background-color: @dark-grey;
+  height: calc(100vh - 60px);
+}
+
+.container {
+  padding: 20px;
+}
+
+.drawer {
+  padding: 20px;
+  background-color: @light-grey;
+  color: @white;
+  min-width: 520px;
+}
+
+.mat-progress-bar {
+  width: 50%;
+}
+
+table {
+  min-width: 850px;
+}
+
+td, th {
+  min-width: 50px;
+}
+
+tr {
+  min-height: 96px;
+}
+
+.mat-row:hover {
+  background-color: @dark-grey;
+  cursor: pointer;
+}
+
+.filter {
+  background-color: @light-grey;
+  width: 300px;
+  height: 60px;
+  padding: 0 20px;
+  color: @white;
+}
+
+.filter .mat-form-field {
+  width: 100%;
+}
+
+.pokemon-icon {
+  margin-right: 10px;
+}
+
+.name-column {
+  min-width: 80px;
+}
+
+.margin-left {
+  margin-left: 16px;
+}
+
+.padding-left {
+  padding-left: 16px;
+}
+
+.second-name {
+  color: @very-light-grey;
+}
+
+.add-button:hover {
+  background-color: @grey;
+}
+
+.number-result {
+  color: @very-light-grey;
+  font-size: 12px;
+}
+
+// Mat Table Override
+.mat-table {
+  background-color: @light-grey;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.mat-paginator {
+  background-color: @light-grey;
+}
+
+.mat-cell, .mat-footer-cell {
+  color: @white;
+}
+
+.mat-header-cell {
+  color: @white;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.table-container {
+  ::ng-deep .mat-select-value, .mat-select-arrow, .mat-select-arrow {
+    color: @white;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+    color: @white;
+  }
+
+  ::ng-deep .mat-paginator, .mat-paginator-page-size .mat-select-trigger {
+    color: @white;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  ::ng-deep .mat-select-arrow {
+    color: @white;
+  }
+}
+
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: @dark-grey;
+}
+
+::ng-deep .mat-option {
+  font-family: 'Nunito Sans', sans-serif;
+  color: @dark-grey;
+}
+
+// Mat Button
+.mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
+  background-color: @light-grey;
+}
+
+.mat-raised-button {
+  background-color: @light-grey;
+  color: @white;
+}

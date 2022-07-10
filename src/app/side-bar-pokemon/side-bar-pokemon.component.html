@@ -1,0 +1,15 @@
+<div *ngIf="pokemon">
+
+  <div class="title-name" fxLayout="row" fxLayoutAlign="space-between center">
+    <div>{{ pokemon.name | titlecase}}</div>
+    <img class="pokemon-icon" [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemon.id + '.png'">
+    <button mat-mini-fab (click)="closeDrawer()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <div *ngFor="let resistance of resistances">
+    <app-resistance *ngIf="resistance.resistances.length" [resistance]="resistance"></app-resistance>
+  </div>
+
+</div>

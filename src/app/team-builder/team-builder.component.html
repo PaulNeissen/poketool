@@ -1,0 +1,26 @@
+<div class="team-container" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1.5vw">
+  <div *ngFor="let pokemon of team" fxFlex="22vw">
+    <mat-card class="mat-elevation-z8">
+
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <span class="avatar" [style]="getImgStyle(pokemon)"></span>
+          <div class="title">{{ pokemon.name | titlecase }}</div>
+        </div>
+        <button mat-mini-fab (click)="removePokemon(pokemon)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <mat-card-content>
+        <mat-form-field appearance="standard">
+          <mat-label>Item</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let item of items" [value]="item">{{ item }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+
+    </mat-card>
+  </div>
+</div>
