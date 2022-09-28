@@ -1,5 +1,5 @@
 <div *ngIf="team">
-  <div >Team's types: </div>
+  <div class="title">Team's types: </div>
   <div class="type-container" fxLayout="row" fxLayoutAlign="start center">
     <div *ngFor="let type of multipleTypes">
       <div fxLayout="row" fxLayoutAlign="start center">
@@ -9,8 +9,8 @@
     </div>
   </div>
 
-  <div >Defensive coverage: </div>
-  <table>  
+  <div class="title">Defensive coverage: </div>
+  <table class="defensive-table">  
     <thead>
       <tr>
         <th></th>
@@ -37,5 +37,21 @@
       </tr>  
     </tbody>  
   </table> 
+  
+  <div class="title">Offensive coverage: </div>
+  <div *ngFor="let i of [0,1,2,3]" >
+    <div fxLayout="row" fxlayoutAlign="start center">
+      <mat-icon class="dropdown" (click)="openDetails(i)">arrow_drop_down</mat-icon>
+      <span>{{ offensiveLabel[i] }}: </span>
+      <span class="coverage-number"> {{ offensiveCoverage[i].length }}</span>
+    </div>
+    <div fxLayout="row wrap">
+      <div *ngFor="let pokemonId of offensiveCoverage[i]">
+        <div *ngIf="hideDetails[i]" class="avatar-container">
+          <span class="avatar small-avatar" [style]="getImgStyleFromId(pokemonId)" [matTooltip]="getNameFromId(pokemonId)"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>

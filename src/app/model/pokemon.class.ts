@@ -5,6 +5,8 @@ export class Pokemon {
   types: number[] = [];
   specie: number;
   nameFr: string = '';
+  moves: number[] = [];
+  selectedMoves: number[] = [0,0,0,0];
 
   // Stats
   hp: number = 0;

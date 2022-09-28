@@ -13,10 +13,19 @@
       </div>
 
       <mat-card-content>
-        <mat-form-field appearance="standard">
+        <!-- Items -->
+        <!--<mat-form-field appearance="standard">
           <mat-label>Item</mat-label>
           <mat-select>
             <mat-option *ngFor="let item of items" [value]="item">{{ item }}</mat-option>
+          </mat-select>
+        </mat-form-field>-->
+
+        <!-- Moves -->
+        <mat-form-field *ngFor="let i of [0,1,2,3]" appearance="standard">
+          <mat-select [(value)]="pokemon.selectedMoves[i]" (selectionChange)="changeMove($event, i, pokemon)">
+            <mat-option [value]="0">--</mat-option>
+            <mat-option *ngFor="let move of pokemon.moves" [value]="move">{{ getMoveName(move) }}</mat-option>
           </mat-select>
         </mat-form-field>
       </mat-card-content>

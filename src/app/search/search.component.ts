@@ -7,6 +7,7 @@ import { Pokemon } from '../model/pokemon.class';
 import { TypeService } from '../service/type.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { templateSourceUrl } from '@angular/compiler';
+import { ModeService } from '../service/mode.service';
 
 @Component({
   selector: 'app-search',
@@ -24,7 +25,8 @@ export class SearchComponent implements OnInit, AfterViewInit {
   public isSideTeam: boolean = false;
   public team: Pokemon[] = [];
 
-  displayedColumns: string[] = ['id', 'name', 'type', 'hp', 'atk', 'def', 'spAtk', 'spDef', 'speed', 'total', 'actions'];
+  displayedColumns = [['id', 'name', 'type', 'actions'], 
+                      ['id', 'name', 'type', 'hp', 'atk', 'def', 'spAtk', 'spDef', 'speed', 'total', 'actions']];
   dataSource: MatTableDataSource<Pokemon>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -33,7 +35,8 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   constructor(
     public pokemonService: PokemonService,
-    public typeService: TypeService
+    public typeService: TypeService,
+    private modeService: ModeService,
   ) {
     this.dataSource = new MatTableDataSource(undefined);
   }
@@ -108,7 +111,16 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   addToTeam($event, pokemon) {
     $event.stopPropagation();
-    if (!this.team.find(e => e.id === pokemon.id) && this.team.length < 6) {
+    if (!this.team.find(e => e.id === pokemon.id) && this.team.length < this.modeService.getTeamSize()) {
+      // Add sorted moves names to the pokemon
+      let tmpArray: any[] = [];
+      pokemon.moves.forEach(move => {
+        let tmp = this.pokemonService.moveNames.get(move);
+        tmpArray.push([move, tmp]);
+      });
+      tmpArray.sort((a,b) => a[1].localeCompare(b[1]));
+      pokemon.moves = tmpArray.map(x => x[0]);
+
       this.team.push(pokemon);
       this.team = this.team.slice();
       localStorage.setItem('team', JSON.stringify(this.team));
@@ -130,5 +142,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
       this.opened = true;
       this.isSideTeam = true;
     }
+  }
+
+  getMode() {
+    return this.modeService.mode;
   }
 }

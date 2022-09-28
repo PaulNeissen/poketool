@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ModeService } from '../service/mode.service';
 
 @Component({
   selector: 'app-menu',
@@ -8,8 +9,11 @@ import { Router } from '@angular/router';
 })
 export class MenuComponent implements OnInit {
 
+  sources = ["assets/logo/logo-go.png", "assets/logo/logo-pokemon.png"];
+
   constructor(
-    private route: Router
+    private route: Router,
+    private modeService: ModeService
   ) { }
 
   ngOnInit(): void {
@@ -17,5 +21,13 @@ export class MenuComponent implements OnInit {
 
   goToSearch() {
     this.route.navigate(['/search']);
+  }
+
+  changeMode() {
+    this.modeService.mode = 1 - this.modeService.mode;
+  }
+
+  getMode() {
+    return this.modeService.mode;
   }
 }

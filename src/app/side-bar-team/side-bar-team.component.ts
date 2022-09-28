@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { Pokemon } from '../model/pokemon.class';
 import { Resistance } from '../model/resistance.class';
 import { Type } from '../model/type.class';
+import { PokemonService } from '../service/pokemon.service';
 import { TypeService } from '../service/type.service';
 
 @Component({
@@ -20,9 +21,13 @@ export class SideBarTeamComponent implements OnInit {
   public singleTypes: number[] = [];
   public multipleTypes: Type[] = [];
   public teamResistances: Resistance[][] = [];
+  public offensiveCoverage: any[] = [];
+  public offensiveLabel: string[] = ['No effect', 'Not very effective', 'Normal effectiveness', 'Super effective'];
+  public hideDetails: boolean[] = [false, false, false, false];
   
   constructor(
-    private typeService: TypeService
+    private typeService: TypeService,
+    private pokemonService: PokemonService
   ) { }
 
   ngOnInit(): void {
@@ -51,20 +56,21 @@ export class SideBarTeamComponent implements OnInit {
           });
 
           this.teamResistances.push(this.typeService.getResistances(pokemon.types));
-          
-
-
         });
-        /*console.log(this.types);
-        console.log(this.singleTypes);
-        console.log(this.multipleTypes);
-        console.log(this.teamResistances);*/
 
-        for(let i = 0; i < 18; i++) {
-          for(let j = 0; j < 18; j++) {
-  
-          }
-        }
+        let moveTypes: number[] = [];
+        this.team.forEach(pokemon => {
+          pokemon.selectedMoves.forEach(moveId => {
+            let move = this.pokemonService.moves.find(x => x.id == moveId && x.power);
+            if (move) {
+              moveTypes.push(move.type);
+            }
+          });
+        });
+
+        this.offensiveCoverage = this.typeService.getOffensiveCoverage(moveTypes);
+        //console.log(this.offensiveCoverage);
+        console.log(this.offensiveCoverage[0].map(x => this.pokemonService.pokemons.find(y => y.id == x)?.nameFr));
       }
     }
   }
@@ -94,10 +100,22 @@ export class SideBarTeamComponent implements OnInit {
   }
 
   getImgStyle(pokemon) {
-    const height = (pokemon.id % 12) * 40;
-    const width =  Math.floor(pokemon.id / 12) * 30;
+    return this.getImgStyleFromId(pokemon.id);
+  }
+
+  getImgStyleFromId(pokemonId) {
+    const height = (pokemonId % 12) * 40;
+    const width =  Math.floor(pokemonId / 12) * 30;
     return "background:transparent url(assets/pokemonicons-sheet.png) no-repeat scroll -" 
       + height.toString() + "px -" + width.toString() + "px";
   }
 
+  getNameFromId(pokemonId) {
+    let pokemon = this.pokemonService.pokemons.find(pokemon => pokemon.id == pokemonId);
+    return pokemon?.name + " | " + pokemon?.nameFr;
+  }
+
+  openDetails(index) {
+    this.hideDetails[index] = !this.hideDetails[index];
+  }
 }

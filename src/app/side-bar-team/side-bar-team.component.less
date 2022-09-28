@@ -6,7 +6,7 @@
 }
 
 .type-container {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 th {
@@ -21,6 +21,10 @@ th {
 .avatar {
   width: 40px;
   height: 30px;
+}
+
+.small-avatar {
+  margin-right: -11px;
 }
 
 .avatar-container {
@@ -51,4 +55,32 @@ th {
 
 .very-green-cell {
   background-color: @very-green;
+}
+
+.defensive-table {
+  margin-bottom: 30px;
+}
+
+.title {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.dropdown {
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.dropdown:hover {
+  cursor: pointer;
+  background-color: @dark-grey;
+}
+
+.coverage-number {
+  font-weight: 700;
+  margin-left: 10px;
+}
+
+::ng-deep .mat-drawer-inner-container {
+  overflow-x: hidden;
 }

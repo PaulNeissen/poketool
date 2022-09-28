@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Resistance } from '../model/resistance.class';
+import { PokemonService } from './pokemon.service';
 import { UtilsService } from './utils.service';
 
 @Injectable({
@@ -22,7 +23,8 @@ export class TypeService {
 
   constructor(
     private http: HttpClient,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private pokemonService: PokemonService
   ) { }
 
   getTypeImgFromId(type) {
@@ -65,12 +67,36 @@ export class TypeService {
   getPokemonResistance(types: number[]): number[] {
     let result: number[] = [];
     for(let i = 0; i < 18; i++) {
-      result.push((this.defensiveTypes[types[0] - 1][i] * (types.length > 1 ? this.defensiveTypes[types[1] - 1][i] : 100)) / 100);
+      result.push(this.getResistanceCoef(types, i));
     }
     return result;
   }
 
+  getResistanceCoef(types: number[], attackType: number) {
+    return (this.defensiveTypes[types[0] - 1][attackType] * (types.length > 1 ? this.defensiveTypes[types[1] - 1][attackType] : 100)) / 100;
+  }
+
   getTypeId(type: string): number {
     return this.types.indexOf(type);
+  }
+
+  getOffensiveCoverage(types: number[]) {
+    let result: any[] = [[],[],[],[]];
+    this.pokemonService.pokemons.forEach(pokemon => {
+      let resistance = 0;
+      types.forEach(type => {
+        resistance = Math.max(this.getResistanceCoef(pokemon.types, type), resistance);
+      });
+      if (resistance == 0) {
+        result[0].push(pokemon.id);
+      } else if (resistance > 0 && resistance < 100) {
+        result[1].push(pokemon.id);
+      } else if (resistance == 100) {
+        result[2].push(pokemon.id);
+      } else if (resistance > 100) {
+        result[3].push(pokemon.id);
+      }
+    });
+    return result;
   }
 }

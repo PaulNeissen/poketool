@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Move } from '../model/move.class';
 import { Pokemon } from '../model/pokemon.class';
 
 @Injectable({
@@ -14,6 +15,8 @@ export class PokemonService {
   public languageId = 5;
   public pokemons: Pokemon[] = [];
   public isInit: Subject<boolean> = new Subject<boolean>();
+  public moveNames: Map<number, string> = new Map<number, string>();
+  public moves: Move[] = [];
 
 
   public pikachus = [10080, 10081, 10082, 10083, 10084, 10085, 10094, 10095, 10096, 10097, 10098, 10099, 10148];
@@ -257,6 +260,7 @@ export class PokemonService {
             }
           })
 
+          // FRENCH NAMES
           this.http.get('assets/data/pokemon_species_names.csv', {responseType: 'text'}).subscribe(data4 => { 
             data4.split('\n').slice(1).forEach(element => { // specie_id language_id name
               const tmp = element.split(',');
@@ -267,8 +271,44 @@ export class PokemonService {
                 }
               }
             })
-            // console.log(this.pokemons);
-            this.isInit.next(true);
+
+            // MOVES
+            this.http.get('assets/data/pokemon_moves.csv', {responseType: 'text'}).subscribe(data5 => { 
+              data5.split('\n').slice(1).forEach(element => { // pokemon_id  version_group_id  move_id  pokemon_move_method_id  level  order
+                const tmp = element.split(',');
+                if (tmp[1] === '18') {
+                  let pokemon = this.pokemons.find(e => e.specie == +tmp[0])
+                  if (pokemon) {
+                    pokemon.moves.push(+tmp[2]);
+                  }
+                }
+              })
+
+              // MOVE NAMES
+              this.http.get('assets/data/move_names.csv', {responseType: 'text'}).subscribe(data6 => { 
+                data6.split('\n').slice(1).forEach(element => { // move_id  local_language_id  name
+                  const tmp = element.split(',');
+                  if (tmp[1] === '9') { // 9 = english
+                    let pokemon = this.pokemons.find(e => e.specie == +tmp[0])
+                    if (pokemon) {
+                      this.moveNames.set(+tmp[0], tmp[2]);
+                    }
+                  }
+                })
+
+                // MOVE INFOS
+                this.http.get('assets/data/moves.csv', {responseType: 'text'}).subscribe(data7 => { 
+                  data7.split('\n').slice(1).forEach(element => { // id,identifier,generation_id,type_id,power,pp,accuracy,priority,target_id,damage_class_id,effect_id,effect_chance,contest_type_id,contest_effect_id,super_contest_effect_id
+                    const tmp = element.split(',');
+                    this.moves.push(new Move(tmp[0], tmp[3], tmp[4]));
+                  })
+
+                  console.log(this.pokemons);
+                  //console.log(this.moveNames);
+                  this.isInit.next(true);
+                });
+              });
+            });
           });
         });
       });

@@ -36,4 +36,12 @@ export class TeamBuilderComponent implements OnInit {
   removePokemon(pokemon) {
     this.remove.emit(pokemon);
   }
+
+  getMoveName(move) {
+    return this.pokemonService.moveNames.get(move);
+  }
+
+  changeMove($event, i, pokemon) {
+    console.log(pokemon.selectedMoves);
+  }
 }

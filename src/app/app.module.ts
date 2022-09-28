@@ -30,6 +30,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { SideBarTeamComponent } from './side-bar-team/side-bar-team.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { SideBarTeamComponent } from './side-bar-team/side-bar-team.component';
     MatIconModule,
     MatCardModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
