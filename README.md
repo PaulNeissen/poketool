@@ -12,7 +12,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `docs/` directory.
+Run `ng build --output-path docs` to build the project. The build artifacts will be stored in the `docs/` directory.
 In order to publish on github pages, you need to :
 - change the basehref to `/poketool/` in `docs/index.html`
 - make a copy of `docs/index.html` and name it `docs/404.html`
