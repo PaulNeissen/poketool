@@ -27,7 +27,7 @@
           <td *ngFor="let defType of getTypes()" align="center" class="cell" (mouseover)="hoverHeader(defType)" (mouseleave)="hoverHeader('')"
             [ngClass]="{'grey-cell': getPercent(offType, defType) === 0, 
                         'green-cell': getPercent(offType, defType) === 50, 
-                        'red-cell': getPercent(offType, defType) === 200}">  
+                        'red-cell': getPercent(offType, defType) === 200}">
             {{ getMultiplier(offType, defType) }}
           </td>  
         </tr>  

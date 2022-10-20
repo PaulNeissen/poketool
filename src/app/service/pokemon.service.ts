@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -11,6 +11,8 @@ import { Pokemon } from '../model/pokemon.class';
 export class PokemonService {
 
   private baseUrl = 'https://pokeapi.co/api/v2/'
+  private tierListUrl = 'https://vps.gobattlelog.com/data/overall/rankings-';
+  private tierListParam = '.json?v=1.34.40';
   public limit = 1118; // max 1118
   public languageId = 5;
   public pokemons: Pokemon[] = [];
@@ -234,7 +236,7 @@ export class PokemonService {
       this.http.get('assets/data/pokemon_types.csv', {responseType: 'text'}).subscribe(data2 => { 
         data2.split('\n').slice(1).forEach(element => {
           const tmp = element.split(',');
-          this.pokemons.find(e => e.id == +tmp[0])?.types.push(Number(tmp[1])); // pokemon_id type_id
+          this.pokemons.find(e => e.id == +tmp[0])?.types.push(Number(tmp[1]) - 1); // pokemon_id type_id
         })
 
         // STATS
@@ -296,16 +298,27 @@ export class PokemonService {
                   }
                 })
 
-                // MOVE INFOS
+                // MOVE INFOS    
                 this.http.get('assets/data/moves.csv', {responseType: 'text'}).subscribe(data7 => { 
                   data7.split('\n').slice(1).forEach(element => { // id,identifier,generation_id,type_id,power,pp,accuracy,priority,target_id,damage_class_id,effect_id,effect_chance,contest_type_id,contest_effect_id,super_contest_effect_id
                     const tmp = element.split(',');
-                    this.moves.push(new Move(tmp[0], tmp[3], tmp[4]));
+                    this.moves.push(new Move(tmp[0], tmp[1], tmp[3], tmp[4]));
                   })
 
-                  console.log(this.pokemons);
-                  //console.log(this.moveNames);
-                  this.isInit.next(true);
+                  // EVOLUTIONS
+                  this.http.get('assets/data/pokemon_species.csv', {responseType: 'text'}).subscribe(data8 => { 
+                    data8.split('\n').slice(1).forEach(element => { // id,identifier,generation_id,evolves_from_species_id,evolution_chain_id,color_id,shape_id,habitat_id,gender_rate,capture_rate,base_happiness,is_baby,hatch_counter,has_gender_differences,growth_rate_id,forms_switchable,is_legendary,is_mythical,order,conquest_order
+                      const tmp = element.split(',');
+                      let pokemons = this.pokemons.filter(e => e.specie == +tmp[0]);
+                      pokemons.forEach(pokemon => {
+                        pokemon.evolveChain = +tmp[4];
+                      });
+                    })
+
+                    console.log(this.pokemons);
+                    console.log(this.moves);
+                    this.isInit.next(true);
+                  });
                 });
               });
             });
@@ -338,4 +351,31 @@ export class PokemonService {
   getImgCoord(id) {
     return this.imgCoord.find(e => e.id === id);
   }
+
+  getTierListData(league: string): Observable<any> {
+    const url = this.tierListUrl + league + this.tierListParam; // ex: 1500-halloween
+    return this.http.get(url).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  getImageId(id) {
+    if (id > 10217) {
+      id += 8;
+    } else if (id == 10217) {
+      id = 10190;
+    } else if (id > 10183) {
+      id += 9;
+    } else if (id > 10182) {
+      id += 8;
+    } else if (id > 10180) {
+      id += 7;
+    } else if (id > 10177) {
+      id += 6;
+    } else if (id > 10157) {
+      id += 3;
+    }
+    return id;
+  }
+
 }

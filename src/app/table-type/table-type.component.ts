@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModeService } from '../service/mode.service';
 import { TypeService } from '../service/type.service';
 
 @Component({
@@ -12,7 +13,8 @@ export class TableTypeComponent implements OnInit {
   hover: string = '';
 
   constructor(
-    private typeService: TypeService
+    private typeService: TypeService,
+    private modeService: ModeService
   ) { }
 
   ngOnInit(): void {
@@ -34,8 +36,13 @@ export class TableTypeComponent implements OnInit {
   }
 
   getMultiplier(offType, defType) {
-    const percent = this.getPercent(offType, defType);
-    return percent === 0 ? 'x 0' : percent === 100 ? '' : 'x ' + percent / 100;
+    if (this.modeService.mode == 1) {
+      const percent = this.getPercent(offType, defType);
+      return percent === 0 ? 'x 0' : percent === 100 ? '' : 'x ' + percent / 100;
+    } else { // Pogo
+      const multiplier = Math.round(this.typeService.offensiveTypesPogo[this.typeService.getTypeId(offType)][this.typeService.getTypeId(defType)] * 100) / 100
+      return multiplier == 1 ? '' : multiplier < 1 ? 'x ' + multiplier.toString().substring(1) : 'x ' + multiplier;
+    }
   }
 
   hoverHeader(type) {

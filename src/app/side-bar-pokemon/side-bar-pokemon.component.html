@@ -2,7 +2,10 @@
 
   <div class="title-name" fxLayout="row" fxLayoutAlign="space-between center">
     <div>{{ pokemon.name | titlecase}}</div>
-    <img class="pokemon-icon" [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemon.id + '.png'">
+    <div>
+      <img *ngFor="let type of pokemon.types" [src]="getTypeSrc(type)">
+    </div>
+    <img class="pokemon-icon" [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getImageId(pokemon.id) + '.png'">
     <button mat-mini-fab (click)="closeDrawer()">
       <mat-icon>close</mat-icon>
     </button>
@@ -10,6 +13,15 @@
   
   <div *ngFor="let resistance of resistances">
     <app-resistance *ngIf="resistance.resistances.length" [resistance]="resistance"></app-resistance>
+  </div>
+
+  <div class="evolution" *ngIf="evolutions.length">
+    <span>Evolution :</span>
+    <div fxLayout="row wrap" fxLayoutAlign="start center">
+      <div *ngFor="let evolution of evolutions" [matTooltip]="evolution.name">
+        <img class="pokemon-icon" (click)="changePokemon(evolution)" [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getImageId(evolution.id) + '.png'">
+      </div>
+    </div>
   </div>
 
 </div>

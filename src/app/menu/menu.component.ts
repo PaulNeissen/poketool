@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit {
   }
 
   changeMode() {
-    this.modeService.mode = 1 - this.modeService.mode;
+    this.modeService.changeMode();
   }
 
   getMode() {

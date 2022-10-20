@@ -45,6 +45,18 @@ tr {
   color: @white;
 }
 
+.league {
+  background-color: @light-grey;
+  width: 200px;
+  height: 60px;
+  padding: 0 20px;
+  color: @white;
+  
+  ::ng-deep .mat-form-field-appearance-standard .mat-form-field-flex {
+    padding-top: 0;
+  }
+}
+
 .filter .mat-form-field {
   width: 100%;
 }
@@ -135,4 +147,13 @@ tr {
 .mat-raised-button {
   background-color: @light-grey;
   color: @white;
+}
+
+.logo-shadow {
+  width: 30px;
+  margin-top: -5px;
+}
+
+.move-name {
+  font-weight: bold;
 }

@@ -22,7 +22,6 @@ import { TableTypeComponent } from './table-type/table-type.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { SideBarPokemonComponent } from './side-bar-pokemon/side-bar-pokemon.component';
 import { ResistanceComponent } from './resistance/resistance.component';
-import { TierListComponent } from './tier-list/tier-list.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { MatButtonModule } from '@angular/material/button';
 import { TeamBuilderComponent } from './team-builder/team-builder.component';
@@ -31,6 +30,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { SideBarTeamComponent } from './side-bar-team/side-bar-team.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +41,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     TableTypeComponent,
     SideBarPokemonComponent,
     ResistanceComponent,
-    TierListComponent,
+    CalendarComponent,
     ComingSoonComponent,
     TeamBuilderComponent,
     SideBarTeamComponent

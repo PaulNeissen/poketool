@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { Pokemon } from '../model/pokemon.class';
 import { Resistance } from '../model/resistance.class';
 import { Type } from '../model/type.class';
+import { ModeService } from '../service/mode.service';
 import { PokemonService } from '../service/pokemon.service';
 import { TypeService } from '../service/type.service';
 
@@ -27,7 +28,8 @@ export class SideBarTeamComponent implements OnInit {
   
   constructor(
     private typeService: TypeService,
-    private pokemonService: PokemonService
+    private pokemonService: PokemonService,
+    private modeService: ModeService
   ) { }
 
   ngOnInit(): void {
@@ -58,9 +60,10 @@ export class SideBarTeamComponent implements OnInit {
           this.teamResistances.push(this.typeService.getResistances(pokemon.types));
         });
 
+        // Offensive Coverage
         let moveTypes: number[] = [];
         this.team.forEach(pokemon => {
-          pokemon.selectedMoves.forEach(moveId => {
+          pokemon.moveset.forEach(moveId => {
             let move = this.pokemonService.moves.find(x => x.id == moveId && x.power);
             if (move) {
               moveTypes.push(move.type);
@@ -69,8 +72,6 @@ export class SideBarTeamComponent implements OnInit {
         });
 
         this.offensiveCoverage = this.typeService.getOffensiveCoverage(moveTypes);
-        //console.log(this.offensiveCoverage);
-        console.log(this.offensiveCoverage[0].map(x => this.pokemonService.pokemons.find(y => y.id == x)?.nameFr));
       }
     }
   }
@@ -88,11 +89,19 @@ export class SideBarTeamComponent implements OnInit {
   }
 
   getMultiplier(percent) {
-    return percent === 0 ? '0' : percent === 100 ? '' : percent === 25 ? '\u00BC' : percent === 50 ? '\u00BD' : percent / 100;
+    if (this.modeService.mode == 0) {
+      return percent == 1 ? '' : percent < 1 ? percent.toString().slice(1) : percent;
+    } else {
+      return percent === 0 ? '0' : percent === 100 ? '' : percent === 25 ? '\u00BC' : percent === 50 ? '\u00BD' : percent / 100;
+    }
   }
 
   getResistances(pokemon) {
-    return this.typeService.getPokemonResistance(pokemon.types);
+    if (this.modeService.mode == 0) {
+      return this.typeService.getPokemonResistancePogo(pokemon.types);
+    } else {
+      return this.typeService.getPokemonResistance(pokemon.types);
+    }
   }
 
   getTypes() {
@@ -104,8 +113,11 @@ export class SideBarTeamComponent implements OnInit {
   }
 
   getImgStyleFromId(pokemonId) {
-    const height = (pokemonId % 12) * 40;
-    const width =  Math.floor(pokemonId / 12) * 30;
+    const coord = this.pokemonService.getImgCoord(pokemonId);
+    const x = pokemonId < 10000 ? Math.floor(pokemonId / 12) : coord!.y;
+    const y = pokemonId < 10000 ? pokemonId % 12 : coord!.x;
+    const width =  x * 30;
+    const height = y * 40;
     return "background:transparent url(assets/pokemonicons-sheet.png) no-repeat scroll -" 
       + height.toString() + "px -" + width.toString() + "px";
   }
@@ -117,5 +129,32 @@ export class SideBarTeamComponent implements OnInit {
 
   openDetails(index) {
     this.hideDetails[index] = !this.hideDetails[index];
+  }
+
+  isPogo() {
+    return ;
+  }
+
+  getCellClasses(resistance) {
+    let result: string[] = [];
+    if (this.modeService.mode == 0) {
+      result.push('cell-pogo');
+    }
+    if (resistance == 0) {
+      result.push('grey-cell');
+    }
+    if (resistance == 25 || resistance == 0.39 || resistance == 0.24) {
+      result.push('very-green-cell');
+    }
+    if (resistance == 50 || resistance == 0.63) {
+      result.push('green-cell');
+    }
+    if (resistance == 200 || resistance == 1.6) {
+      result.push('red-cell');
+    }
+    if (resistance == 400 || resistance == 2.56) {
+      result.push('very-red-cell');
+    }
+    return result;
   }
 }

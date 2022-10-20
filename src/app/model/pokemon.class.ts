@@ -6,7 +6,14 @@ export class Pokemon {
   specie: number;
   nameFr: string = '';
   moves: number[] = [];
-  selectedMoves: number[] = [0,0,0,0];
+  fastMoves: number[] = [];
+  chargedMoves: number[] = [];
+  moveset: number[] = [];
+  recommendedMoves: number[] = [];
+  weatherBallType: number = -1;
+  evolveTo: number = 0;
+  evolveFrom: number = 0;
+  evolveChain: number = 0;
 
   // Stats
   hp: number = 0;
@@ -17,20 +24,13 @@ export class Pokemon {
   speed: number = 0;
   total: number = 0;
 
-  /*constructor(element) {
-    this.id = element.id;
-    this.order = element.order;
-    this.name = element.name;
-    this.types = element.types;
-
-    this.hp = element.stats[0].base_stat;
-    this.atk = element.stats[1].base_stat;
-    this.def = element.stats[2].base_stat;
-    this.spAtk = element.stats[3].base_stat;
-    this.spDef = element.stats[4].base_stat;
-    this.speed = element.stats[5].base_stat;
-    this.total = this.hp + this.atk + this.def + this.spAtk + this.spDef + this.speed;
-  }*/
+  rank: number = 10000;
+  shadowRank: number = 10000;
+  counters: any;
+  matchups: any;
+  rating: number = 0;
+  score: number = 0;
+  scores: number[] = [];
 
   constructor(id: string, name: string, specie: string) {
     this.id = Number(id);
@@ -42,4 +42,18 @@ export class Pokemon {
     this.total = this.hp + this.atk + this.def + this.spAtk + this.spDef + this.speed;
   }
 
+  updatePogo(data, rank, isShadow, weatherBallType) {
+    this.rating = data.rating;
+    if (isShadow) {
+      this.shadowRank = rank;
+    } else {
+      this.rank = rank;
+    }
+    this.moveset = data.moveset;
+    this.recommendedMoves = data.moveset.slice();
+    this.fastMoves = data.moves.fastMoves;
+    this.chargedMoves = data.moves.chargedMoves;
+    this.weatherBallType = weatherBallType;
+    this.score = data.score;
+  }
 }

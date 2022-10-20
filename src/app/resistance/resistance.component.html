@@ -1,9 +1,7 @@
 <div fxlayout="row" fxLayoutAlign="start center">
   {{ resistance.title | titlecase }} :
-  <!--<div class="multiplier">x 2</div>-->
 </div>
 <div class="type-icons" fxLayout="row" fxLayoutAlign="start center">
-  
   <div *ngFor="let resistance of resistance.resistances">
     <img class="type-img" [src]="getTypeSrc(resistance)">
   </div>

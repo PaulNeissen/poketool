@@ -19,6 +19,6 @@ export class ResistanceComponent implements OnInit {
   }
 
   getTypeSrc(type) {
-    return this.typeService.getTypeImgFromId(type + 1);
+    return this.typeService.getTypeImgFromId(type);
   }
 }

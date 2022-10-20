@@ -6,7 +6,6 @@ import { MatSort } from '@angular/material/sort';
 import { Pokemon } from '../model/pokemon.class';
 import { TypeService } from '../service/type.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { templateSourceUrl } from '@angular/compiler';
 import { ModeService } from '../service/mode.service';
 
 @Component({
@@ -16,7 +15,6 @@ import { ModeService } from '../service/mode.service';
 })
 export class SearchComponent implements OnInit, AfterViewInit {
 
-  public pokemons: any[] = [];
   public limit: number = this.pokemonService.limit; // 1118
   public imgUrl: string = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png';
   public loaded: boolean = false;
@@ -24,9 +22,17 @@ export class SearchComponent implements OnInit, AfterViewInit {
   public opened: boolean = false;
   public isSideTeam: boolean = false;
   public team: Pokemon[] = [];
+  public leagues: any[] = [
+    {name: 'Great league', value: '1500'}, 
+    {name: 'Ultra league', value: '2500'}, 
+    {name: 'Master league', value: '10000'},
+    {name: 'Great Halloween', value: '1500-halloween'},
+    {name: 'Ultra Halloween', value: '2500-halloween'},
+  ];
+  public league: string = this.leagues[0].value;
 
-  displayedColumns = [['id', 'name', 'type', 'actions'], 
-                      ['id', 'name', 'type', 'hp', 'atk', 'def', 'spAtk', 'spDef', 'speed', 'total', 'actions']];
+  displayedColumns = [['rank', 'score', 'image', 'name', 'type', 'moves', 'actions'], 
+                      ['id', 'image', 'name', 'type', 'hp', 'atk', 'def', 'spAtk', 'spDef', 'speed', 'total', 'actions']];
   dataSource: MatTableDataSource<Pokemon>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -45,18 +51,86 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.pokemonService.isInit.subscribe(value => {
       if (value) {
         this.dataSource.data = this.pokemonService.pokemons;
+        this.getTierListData();
         this.loaded = true;
+        this.modeService.currentMode.subscribe(mode => {
+          let tmpTeam = localStorage.getItem('team' + mode) || '';
+          if (localStorage.getItem('team' + mode)) {
+            this.team = JSON.parse(tmpTeam);
+          }
+        });
       }
     })
     this.pokemonService.initPokemons();
     this.typeService.initType();
 
-    let tmpTeam = localStorage.getItem('team') || '';
-    if (localStorage.getItem('team')) {
+    let tmpTeam = localStorage.getItem('team' + this.modeService.mode) || '';
+    if (localStorage.getItem('team' + this.modeService.mode)) {
       this.team = JSON.parse(tmpTeam);
     }
+  }
 
-    // this.getAllPokemonsDetails(1);
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.customSort();
+  }
+
+  customSort() {
+    if (this.modeService.mode == 0) {
+      //this.sort.sort(({ id: 'rank', start: 'asc'}) as MatSortable);
+    }
+    this.dataSource.sort = this.sort;
+  }
+
+  // Load tier list POGO
+  getTierListData() {
+    if (this.modeService.mode == 0) {
+      this.pokemonService.getTierListData(this.league).subscribe(data => {
+        console.log(data);
+        for(let i = 0; i < data.length; i++) {
+          // TODO : handle alolan and others
+          const isShadow = data[i].speciesId.includes('_shadow');
+          const pokeName = data[i].speciesId.replace('_shadow', '').replace('_', '-').replace('galarian', 'galar');
+          let pokemon = this.pokemonService.pokemons.find(x => x.name == pokeName);
+
+          if (pokemon) {
+
+            // weather ball
+            let weatherBallType = -1;
+
+            // moveset
+            data[i].moveset = data[i].moveset.map(x => {
+              let moveName = x.replaceAll('_','-').toLowerCase();
+              if (moveName.includes('weather')) { // Handle weather ball type
+                let moveSplit = moveName.split('-');
+                weatherBallType = this.typeService.getTypeId(moveSplit[2]);
+                moveName = 'weather-ball';
+              }
+              return this.pokemonService.moves.find(y => y.name == moveName)?.id;
+            });
+
+            // Fast moves
+            data[i].moves.fastMoves = data[i].moves.fastMoves.map(x => this.getMoveNameFromPogo(x.moveId));
+
+            // ChargedMoves
+            data[i].moves.chargedMoves = data[i].moves.chargedMoves.map(x => this.getMoveNameFromPogo(x.moveId));
+
+            pokemon.updatePogo(data[i], i+1, isShadow, weatherBallType);
+          }
+        }
+        // Sort by rank
+        this.pokemonService.pokemons.sort((a, b) => (Math.min(a.rank, a.shadowRank) < Math.min(b.rank, b.shadowRank)) ? -1 : 1)
+        this.dataSource.data = this.pokemonService.pokemons;
+      })
+    }
+  }
+
+  getMoveNameFromPogo(pogoMoveName) {
+    let moveName = pogoMoveName.replaceAll('_','-').toLowerCase();
+    if (moveName.includes('weather')) { // Handle weather ball type
+      moveName = 'weather-ball';
+    }
+    return this.pokemonService.moves.find(y => y.name == moveName)?.id;
   }
 
   getAllPokemonsDetails(limit) {
@@ -66,11 +140,6 @@ export class SearchComponent implements OnInit, AfterViewInit {
         console.log(pokemon);
       });
     });
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event) {
@@ -95,6 +164,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
       this.drawer.toggle();
       this.opened = !this.opened;
       this.isSideTeam = false;
+      this.pokemon = undefined;
     } else {
       this.pokemon = pokemon;
       this.drawer.open();
@@ -107,6 +177,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.drawer.toggle();
     this.opened = false;
     this.isSideTeam = false;
+    this.pokemon = undefined;
   }
 
   addToTeam($event, pokemon) {
@@ -123,13 +194,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
       this.team.push(pokemon);
       this.team = this.team.slice();
-      localStorage.setItem('team', JSON.stringify(this.team));
+      localStorage.setItem('team' + this.modeService.mode, JSON.stringify(this.team));
     }
   }
 
   removePokemon(pokemon) {
     this.team = this.team.filter(e => e.id !== pokemon.id);
-    localStorage.setItem('team', JSON.stringify(this.team));
+    pokemon.moveset = pokemon.recommendedMoves.slice();
+    this.saveTeam();
   }
 
   displayTeamStats() {
@@ -146,5 +218,47 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   getMode() {
     return this.modeService.mode;
+  }
+
+  changeLeague() {
+    this.pokemonService.pokemons.forEach(pokemon => {
+      pokemon.rank = 10000;
+      pokemon.shadowRank = 10000;
+    });
+    this.getTierListData();
+  }
+
+  getImageId(id) {
+    return this.pokemonService.getImageId(id);
+  }
+
+  getIds() {
+    let result: number[] = [];
+    for(let i = 1; i < 250; i++) {
+      result.push(10000 + i);
+    }
+    return result;
+  }
+
+  getBestRank(pokemon) {
+    const rank = Math.min(pokemon.rank, pokemon.shadowRank);
+    return rank < 10000 ? rank : '';
+  }
+
+  getOtherRank(pokemon) {
+    const rankMax = Math.max(pokemon.rank, pokemon.shadowRank);
+    return rankMax < 10000 ? '(' + rankMax + ')' : '';
+  }
+
+  getMoveType(move, weatherBallType) {
+    return this.typeService.getMoveTypeName(move, weatherBallType);
+  }
+
+  getMoveName(move) {
+    return this.pokemonService.moveNames.get(move);
+  }
+
+  saveTeam() {
+    localStorage.setItem('team' + this.modeService.mode, JSON.stringify(this.team));
   }
 }

@@ -26,12 +26,7 @@
             <span class="avatar" [style]="getImgStyle(pokemon)"></span>
           </div>
         </td> 
-        <td *ngFor="let resistance of getResistances(pokemon)" align="center" class="cell"
-          [ngClass]="{'grey-cell': resistance === 0, 
-                      'very-green-cell': resistance === 25,
-                      'green-cell': resistance === 50, 
-                      'red-cell': resistance === 200, 
-                      'very-red-cell': resistance === 400}">
+        <td *ngFor="let resistance of getResistances(pokemon)" align="center" class="cell" [ngClass]="getCellClasses(resistance)">
           {{ getMultiplier(resistance) }}
         </td>  
       </tr>  

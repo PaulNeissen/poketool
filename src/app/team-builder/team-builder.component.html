@@ -1,5 +1,5 @@
 <div class="team-container" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1.5vw">
-  <div *ngFor="let pokemon of team" fxFlex="22vw">
+  <div *ngFor="let pokemon of team" fxFlex="18vw">
     <mat-card class="mat-elevation-z8">
 
       <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -13,21 +13,49 @@
       </div>
 
       <mat-card-content>
-        <!-- Items -->
-        <!--<mat-form-field appearance="standard">
-          <mat-label>Item</mat-label>
-          <mat-select>
-            <mat-option *ngFor="let item of items" [value]="item">{{ item }}</mat-option>
-          </mat-select>
-        </mat-form-field>-->
 
-        <!-- Moves -->
-        <mat-form-field *ngFor="let i of [0,1,2,3]" appearance="standard">
-          <mat-select [(value)]="pokemon.selectedMoves[i]" (selectionChange)="changeMove($event, i, pokemon)">
-            <mat-option [value]="0">--</mat-option>
-            <mat-option *ngFor="let move of pokemon.moves" [value]="move">{{ getMoveName(move) }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div *ngIf="!isPogo()">
+          <!-- Items -->
+          <!--<mat-form-field appearance="standard">
+            <mat-label>Item</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let item of items" [value]="item">{{ item }}</mat-option>
+            </mat-select>
+          </mat-form-field>-->
+          <!-- Moves -->
+          <mat-form-field *ngFor="let i of [0,1,2,3]" appearance="standard">
+            <mat-select [(value)]="pokemon.moveset[i]" (selectionChange)="changeMove($event, i, pokemon)">
+              <mat-option [value]="0">--</mat-option>
+              <mat-option *ngFor="let move of pokemon.moves" [value]="move">{{ getMoveName(move) }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- POGO -->
+        <div *ngIf="isPogo()">
+
+          <!-- Moves -->
+          <div *ngFor="let i of [0,1,2]" fxLayout="row" fxLayoutAlign="start center">
+            <mat-form-field  appearance="standard">
+              <mat-select [(value)]="pokemon.moveset[i]" (selectionChange)="changeMovePogo($event, pokemon, i)">
+                <mat-select-trigger>
+                  <div [ngClass]="getTypeNameTrigger(i, pokemon)" class="title">
+                    {{ getMoveNameTrigger(i, pokemon) }}
+                  </div>
+                </mat-select-trigger>
+                <mat-option *ngFor="let move of getMoves(pokemon, i)" [value]="move">
+                  <div [ngClass]="getTypeName(move, pokemon)" class="title">
+                    {{ getMoveName(move) }}
+                  </div>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div (click)="removeMove(pokemon, i)" class="remove-move" fxLayout="row" fxLayoutAlign="center center">
+              <mat-icon>close</mat-icon>
+            </div>
+          </div>
+
+        </div>
       </mat-card-content>
 
     </mat-card>
