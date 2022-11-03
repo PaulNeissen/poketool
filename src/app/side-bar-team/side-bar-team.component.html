@@ -1,4 +1,27 @@
 <div *ngIf="team">
+  <div class="title">Simulation's settings: </div>
+  <div fxLayout="column" fxLayoutAlign="start start" class="settings">
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div>Defensive coverage max options :</div>
+      <mat-form-field appearance="standard">
+        <mat-select [(value)]="maxOptionsDef">
+          <mat-option *ngFor="let opt of maxOptionsChoice" [value]="opt">{{ opt }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div>Offensive coverage max options :</div>
+      <mat-form-field appearance="standard">
+        <mat-select [(value)]="maxOptionsOff">
+          <mat-option *ngFor="let opt of maxOptionsChoice" [value]="opt">{{ opt }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button (click)="simulate()">
+      Simulate
+    </button>
+  </div>
+
   <div class="title">Team's types: </div>
   <div class="type-container" fxLayout="row" fxLayoutAlign="start center">
     <div *ngFor="let type of multipleTypes">
@@ -14,7 +37,7 @@
     <thead>
       <tr>
         <th></th>
-        <th scope="col" *ngFor="let type of getTypes()">  
+        <th scope="col" *ngFor="let type of getTypes()">
           <img class="type-img" [src]="getTypeSrcFromName(type)"> 
         </th>  
       </tr>  
@@ -23,17 +46,41 @@
       <tr *ngFor="let pokemon of team"> 
         <td align="center">
           <div class="avatar-container">
-            <span class="avatar" [style]="getImgStyle(pokemon)"></span>
+            <span class="avatar" [style]="getImgStyle(pokemon)" [matTooltip]="pokemon.name"></span>
           </div>
         </td> 
         <td *ngFor="let resistance of getResistances(pokemon)" align="center" class="cell" [ngClass]="getCellClasses(resistance)">
           {{ getMultiplier(resistance) }}
         </td>  
       </tr>  
+      <tr *ngFor="let option of getOptionsDef()">
+        <td align="center">
+          <div class="avatar-container">
+            <span class="avatar" [style]="getImgStyle(option)" [matTooltip]="option.name"></span>
+          </div>
+        </td> 
+        <td *ngFor="let resistance of getResistances(option)" align="center" class="cell" [ngClass]="getCellClasses(resistance)">
+          {{ getMultiplier(resistance) }}
+        </td>
+      </tr>
     </tbody>  
   </table> 
+         
+  <div *ngIf="team.length == 2" class="def-option-container" fxLayout="row" fxLayoutAlign="start center">
+    <div (click)="changeDefOption()" class="refresh-option" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon>refresh</mat-icon>
+    </div>
+
+    <div>
+      {{ pokemonOptionIndex }} / {{ maxOptionsDef }}
+    </div>
+
+    <!--<div (click)="showAllOptions()" class="refresh-option" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon>expand_more</mat-icon>
+    </div>-->
+  </div>
   
-  <div class="title">Offensive coverage: </div>
+  <div class="title off-coverage">Offensive coverage: </div>
   <div *ngFor="let i of [0,1,2,3]" >
     <div fxLayout="row" fxlayoutAlign="start center">
       <mat-icon class="dropdown" (click)="openDetails(i)">arrow_drop_down</mat-icon>

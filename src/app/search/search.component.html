@@ -41,9 +41,8 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Rank </th>
             <td mat-cell *matCellDef="let row"> 
               <div fxLayout="row" fxLayoutAlign="start center">
-                {{ getBestRank(row) }}
-                <img *ngIf="row.shadowRank < row.rank" class="logo-shadow" src="assets/symbols/shadow.png">
-                {{ getOtherRank(row) }}
+                {{ row.rank }}
+                <img *ngIf="row.isShadow" class="logo-shadow" src="assets/symbols/shadow.png">
               </div>
             </td>
           </ng-container>

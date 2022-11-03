@@ -315,8 +315,8 @@ export class PokemonService {
                       });
                     })
 
-                    console.log(this.pokemons);
-                    console.log(this.moves);
+                    console.log("ALL POKEMONS", this.pokemons);
+                    console.log("ALL MOVES", this.moves);
                     this.isInit.next(true);
                   });
                 });

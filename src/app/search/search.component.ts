@@ -26,6 +26,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     {name: 'Great league', value: '1500'}, 
     {name: 'Ultra league', value: '2500'}, 
     {name: 'Master league', value: '10000'},
+    {name: 'Will Power', value: '1500-willpower'},
     {name: 'Great Halloween', value: '1500-halloween'},
     {name: 'Ultra Halloween', value: '2500-halloween'},
   ];
@@ -58,6 +59,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
           if (localStorage.getItem('team' + mode)) {
             this.team = JSON.parse(tmpTeam);
           }
+          this.pokemonService.pokemons = this.pokemonService.pokemons.filter(x => !x.isShadow); // TODO : not working
         });
       }
     })
@@ -86,12 +88,24 @@ export class SearchComponent implements OnInit, AfterViewInit {
   getTierListData() {
     if (this.modeService.mode == 0) {
       this.pokemonService.getTierListData(this.league).subscribe(data => {
-        console.log(data);
+        console.log("PVP DATA : ", data);
         for(let i = 0; i < data.length; i++) {
           // TODO : handle alolan and others
           const isShadow = data[i].speciesId.includes('_shadow');
-          const pokeName = data[i].speciesId.replace('_shadow', '').replace('_', '-').replace('galarian', 'galar');
+          const pokeName = data[i].speciesId.replace('_shadow', '').replace('_', '-').replace('galarian', 'galar').replace('alolan', 'alola');
           let pokemon = this.pokemonService.pokemons.find(x => x.name == pokeName);
+
+          // handle non existing pokemon in csv (like hisuian pokemons)
+          if (pokemon == undefined) {
+            if (pokeName == "qwilfish-hisuian") {
+              let tmpPokemon = this.pokemonService.pokemons.find(x => x.name.includes("qw"));
+              pokemon = new Pokemon(tmpPokemon.id.toString(), pokeName, tmpPokemon.specie.toString());
+              pokemon.clone(tmpPokemon);
+              pokemon.name = "qwilfish-hisuian";
+              pokemon.types = [3,16];
+              this.pokemonService.pokemons.push(pokemon);
+            }
+          }
 
           if (pokemon) {
 
@@ -115,12 +129,20 @@ export class SearchComponent implements OnInit, AfterViewInit {
             // ChargedMoves
             data[i].moves.chargedMoves = data[i].moves.chargedMoves.map(x => this.getMoveNameFromPogo(x.moveId));
 
-            pokemon.updatePogo(data[i], i+1, isShadow, weatherBallType);
+            if (isShadow) {
+              let tmpPoke = new Pokemon(pokemon.id.toString(), pokemon.name, pokemon.specie.toString());
+              tmpPoke.clone(pokemon);
+              tmpPoke.updatePogo(data[i], i+1, isShadow, weatherBallType);
+              this.pokemonService.pokemons.push(tmpPoke);
+            } else {
+              pokemon.updatePogo(data[i], i+1, isShadow, weatherBallType);
+            }
           }
         }
         // Sort by rank
-        this.pokemonService.pokemons.sort((a, b) => (Math.min(a.rank, a.shadowRank) < Math.min(b.rank, b.shadowRank)) ? -1 : 1)
-        this.dataSource.data = this.pokemonService.pokemons;
+        this.pokemonService.pokemons.sort((a, b) => a.rank < b.rank ? -1 : 1)
+        console.log("POGO POKEMONS", this.pokemonService.pokemons);
+        this.dataSource.data = this.pokemonService.pokemons.filter(x => x.rank < 10000);
       })
     }
   }
@@ -221,9 +243,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
   }
 
   changeLeague() {
+    this.pokemonService.pokemons = this.pokemonService.pokemons.filter(x => !x.isShadow);
     this.pokemonService.pokemons.forEach(pokemon => {
       pokemon.rank = 10000;
-      pokemon.shadowRank = 10000;
     });
     this.getTierListData();
   }
@@ -238,16 +260,6 @@ export class SearchComponent implements OnInit, AfterViewInit {
       result.push(10000 + i);
     }
     return result;
-  }
-
-  getBestRank(pokemon) {
-    const rank = Math.min(pokemon.rank, pokemon.shadowRank);
-    return rank < 10000 ? rank : '';
-  }
-
-  getOtherRank(pokemon) {
-    const rankMax = Math.max(pokemon.rank, pokemon.shadowRank);
-    return rankMax < 10000 ? '(' + rankMax + ')' : '';
   }
 
   getMoveType(move, weatherBallType) {

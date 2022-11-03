@@ -61,10 +61,6 @@ th {
   background-color: @very-green;
 }
 
-.defensive-table {
-  margin-bottom: 30px;
-}
-
 .title {
   font-weight: 700;
   margin-bottom: 10px;
@@ -87,4 +83,48 @@ th {
 
 ::ng-deep .mat-drawer-inner-container {
   overflow-x: hidden;
+}
+
+.settings {
+  margin-bottom: 50px;
+
+  button {
+    margin-top: 20px;
+  }
+
+  ::ng-deep .mat-form-field-flex {
+    padding-top: 0;
+    width: 50px;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    border-top: 0;
+  }
+}
+
+.refresh-option {
+  height: 24px;
+  width: 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin: 0 10px;
+  
+  .mat-icon {
+    font-size: 18px;
+    height: auto;
+    width: auto;
+  }
+}
+
+.refresh-option:hover {
+  background-color: @grey;
+}
+
+.def-option-container {
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+.off-coverage {
+  margin-top: 30px;
 }

@@ -25,6 +25,12 @@ export class SideBarTeamComponent implements OnInit {
   public offensiveCoverage: any[] = [];
   public offensiveLabel: string[] = ['No effect', 'Not very effective', 'Normal effectiveness', 'Super effective'];
   public hideDetails: boolean[] = [false, false, false, false];
+  public pokemonOptionIndex: number = 0;
+  public maxOptionsDef: number = 100;
+  public maxOptionsOff: number = 200;
+  public maxOptionsChoice: number[] = [20, 50, 100, 200, 500];
+  public bestOptionsDef: any[] = [];
+  public nbOptionShow: number = 1;
   
   constructor(
     private typeService: TypeService,
@@ -41,11 +47,12 @@ export class SideBarTeamComponent implements OnInit {
       this.singleTypes = [];
       this.multipleTypes = [];
       this.teamResistances = [];
+
       if (this.team) {
+        
+        // Defensive Coverage
         this.team.forEach(pokemon => {
-
           this.types.push(new Type(1, pokemon.types));
-
           this.singleTypes = [ ...new Set(this.singleTypes.concat(pokemon.types)) ];
 
           pokemon.types.forEach(type => {
@@ -57,21 +64,13 @@ export class SideBarTeamComponent implements OnInit {
             }
           });
 
-          this.teamResistances.push(this.typeService.getResistances(pokemon.types));
+          this.teamResistances.push(this.typeService.getResistances(pokemon.types)); // TODO : not used
         });
 
-        // Offensive Coverage
-        let moveTypes: number[] = [];
-        this.team.forEach(pokemon => {
-          pokemon.moveset.forEach(moveId => {
-            let move = this.pokemonService.moves.find(x => x.id == moveId && x.power);
-            if (move) {
-              moveTypes.push(move.type);
-            }
-          });
-        });
+        // Defensive option
+        this.simulate();
 
-        this.offensiveCoverage = this.typeService.getOffensiveCoverage(moveTypes);
+        
       }
     }
   }
@@ -156,5 +155,69 @@ export class SideBarTeamComponent implements OnInit {
       result.push('very-red-cell');
     }
     return result;
+  }
+
+  simulate() {
+    if (this.team.length == 2) {
+      this.simulateDefOption();
+      this.simulateOffOption();
+    }
+  }
+
+  simulateDefOption() {
+    this.bestOptionsDef = [];
+    for(let i = 0; i < this.maxOptionsDef; i++) {
+      let pokemon = this.pokemonService.pokemons[i];
+      let tmpResistances = [this.getResistances(this.team[0]), this.getResistances(this.team[1]), this.getResistances(pokemon)];
+      let resistancesArray = [];
+      let resistanceScore = 0;
+      for(let y = 0; y < 18; y++) {
+        let coef = 1;
+        tmpResistances.forEach(resistance => {
+          coef *= resistance[y];
+        });
+        resistancesArray.push(coef);
+        resistanceScore += Math.pow(coef, 3); // TODO : trouver une bonne formule
+      }
+      pokemon.defOption = resistanceScore;
+      this.bestOptionsDef.push(pokemon);
+    }
+    this.bestOptionsDef = this.bestOptionsDef.sort((a,b) => a.defOption >= b.defOption ? 1 : -1);
+  }
+
+  changeDefOption() {
+    this.pokemonOptionIndex += 1;
+    this.simulate();
+  }
+
+  showAllOptions() {
+    this.nbOptionShow = this.nbOptionShow == 1 ? 5 : 1;
+  }
+
+  getOptionsDef() {
+    return this.bestOptionsDef.slice(this.pokemonOptionIndex, this.pokemonOptionIndex + this.nbOptionShow);
+  }
+
+  simulateOffOption() {
+    // Offensive Coverage
+    let moveTypes: number[] = [];
+    this.team.forEach(pokemon => {
+      pokemon.moveset.forEach(moveId => {
+        let move = this.pokemonService.moves.find(x => x.id == moveId && x.power);
+        if (move) {
+          moveTypes.push(move.type);
+        }
+      });
+    });
+    this.getOptionsDef().forEach(pokemon => {
+      pokemon.moveset.forEach(moveId => {
+        let move = this.pokemonService.moves.find(x => x.id == moveId && x.power);
+        if (move) {
+          moveTypes.push(move.type);
+        }
+      });
+    });
+
+    this.offensiveCoverage = this.typeService.getOffensiveCoverage(moveTypes, this.maxOptionsOff);
   }
 }

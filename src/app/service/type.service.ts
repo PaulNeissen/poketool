@@ -157,9 +157,10 @@ export class TypeService {
     return this.types.indexOf(type);
   }
 
-  getOffensiveCoverage(types: number[]) {
+  getOffensiveCoverage(types: number[], range) {
     let result: any[] = [[],[],[],[]];
-    this.pokemonService.pokemons.forEach(pokemon => {
+    for(let i = 0; i < range; i++) {
+      let pokemon = this.pokemonService.pokemons[i];
       let resistance = 0;
       types.forEach(type => {
         resistance = Math.max(this.getResistanceCoef(pokemon.types, type), resistance);
@@ -173,7 +174,7 @@ export class TypeService {
       } else if (resistance > 100) {
         result[3].push(pokemon.id);
       }
-    });
+    }
     return result;
   }
 
