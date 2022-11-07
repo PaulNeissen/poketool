@@ -70,7 +70,6 @@ export class SideBarTeamComponent implements OnInit {
         // Defensive option
         this.simulate();
 
-        
       }
     }
   }
@@ -160,8 +159,8 @@ export class SideBarTeamComponent implements OnInit {
   simulate() {
     if (this.team.length == 2) {
       this.simulateDefOption();
-      this.simulateOffOption();
     }
+    this.simulateOffOption();
   }
 
   simulateDefOption() {
@@ -195,7 +194,10 @@ export class SideBarTeamComponent implements OnInit {
   }
 
   getOptionsDef() {
-    return this.bestOptionsDef.slice(this.pokemonOptionIndex, this.pokemonOptionIndex + this.nbOptionShow);
+    if (this.team.length == 2) {
+      return this.bestOptionsDef.slice(this.pokemonOptionIndex, this.pokemonOptionIndex + this.nbOptionShow);
+    }
+    return [];
   }
 
   simulateOffOption() {
@@ -210,7 +212,7 @@ export class SideBarTeamComponent implements OnInit {
       });
     });
     this.getOptionsDef().forEach(pokemon => {
-      pokemon.moveset.forEach(moveId => {
+      pokemon.recommendedMoves.forEach(moveId => {
         let move = this.pokemonService.moves.find(x => x.id == moveId && x.power);
         if (move) {
           moveTypes.push(move.type);
@@ -218,6 +220,8 @@ export class SideBarTeamComponent implements OnInit {
       });
     });
 
+    console.log("MOVE TYPES", moveTypes);
     this.offensiveCoverage = this.typeService.getOffensiveCoverage(moveTypes, this.maxOptionsOff);
+    console.log("OFF COVERAGE", this.offensiveCoverage);
   }
 }
