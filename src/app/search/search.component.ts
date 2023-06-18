@@ -23,14 +23,15 @@ export class SearchComponent implements OnInit, AfterViewInit {
   public isSideTeam: boolean = false;
   public team: Pokemon[] = [];
   public leagues: any[] = [
-    {name: 'Great league', value: '1500'}, 
-    {name: 'Ultra league', value: '2500'}, 
-    {name: 'Master league', value: '10000'},
-    {name: 'Will Power', value: '1500-willpower'},
-    {name: 'Great Halloween', value: '1500-halloween'},
-    {name: 'Ultra Halloween', value: '2500-halloween'},
+    {name: 'Great league', value: '1500', folder: 'overall'}, 
+    {name: 'Ultra league', value: '2500', folder: 'overall'}, 
+    {name: 'Master league', value: '10000', folder: 'overall'},
+    {name: 'Single-Type Cup', value: '1500', folder: 'single'},
+    {name: 'Will Power', value: '1500-willpower', folder: 'overall'},
+    {name: 'Great Halloween', value: '1500-halloween', folder: 'overall'},
+    {name: 'Ultra Halloween', value: '2500-halloween', folder: 'overall'},
   ];
-  public league: string = this.leagues[0].value;
+  public league: any = this.leagues[0];
 
   displayedColumns = [['rank', 'score', 'image', 'name', 'type', 'moves', 'actions'], 
                       ['id', 'image', 'name', 'type', 'hp', 'atk', 'def', 'spAtk', 'spDef', 'speed', 'total', 'actions']];

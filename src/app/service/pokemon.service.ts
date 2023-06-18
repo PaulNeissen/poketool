@@ -11,7 +11,7 @@ import { Pokemon } from '../model/pokemon.class';
 export class PokemonService {
 
   private baseUrl = 'https://pokeapi.co/api/v2/'
-  private tierListUrl = 'https://vps.gobattlelog.com/data/overall/rankings-';
+  private tierListUrl = 'https://vps.gobattlelog.com/data/';
   private tierListParam = '.json?v=1.34.40';
   public limit = 1118; // max 1118
   public languageId = 5;
@@ -352,8 +352,8 @@ export class PokemonService {
     return this.imgCoord.find(e => e.id === id);
   }
 
-  getTierListData(league: string): Observable<any> {
-    const url = this.tierListUrl + league + this.tierListParam; // ex: 1500-halloween
+  getTierListData(league: any): Observable<any> {
+    const url = this.tierListUrl + league.folder + '/rankings-' + league.value + this.tierListParam; // ex: 1500-halloween
     return this.http.get(url).pipe(
       catchError(error => this.handleError(error))
     );

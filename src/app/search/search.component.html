@@ -24,7 +24,7 @@
       <div *ngIf="getMode() == 0" class="league mat-elevation-z8">
         <mat-form-field appearance="standard">
           <mat-select [(value)]="league" (selectionChange)="changeLeague()">
-            <mat-option *ngFor="let league of leagues" [value]="league.value">{{ league.name }}</mat-option>
+            <mat-option *ngFor="let league of leagues" [value]="league">{{ league.name }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
