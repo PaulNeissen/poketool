@@ -61,6 +61,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
             this.team = JSON.parse(tmpTeam);
           }
           this.pokemonService.pokemons = this.pokemonService.pokemons.filter(x => !x.isShadow); // TODO : not working
+
+          if (mode == 1) {
+            this.pokemonService.pokemons.sort((a, b) => a.id < b.id ? -1 : 1);
+            this.dataSource.data = this.pokemonService.pokemons;
+          } else {
+            this.pokemonService.pokemons.sort((a, b) => a.rank < b.rank ? -1 : 1);
+            this.dataSource.data = this.pokemonService.pokemons;
+          }
         });
       }
     })
@@ -143,7 +151,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
         // Sort by rank
         this.pokemonService.pokemons.sort((a, b) => a.rank < b.rank ? -1 : 1)
         console.log("POGO POKEMONS", this.pokemonService.pokemons);
-        this.dataSource.data = this.pokemonService.pokemons.filter(x => x.rank < 10000);
+        this.dataSource.data = this.pokemonService.pokemons;
       })
     }
   }

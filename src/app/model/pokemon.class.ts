@@ -25,7 +25,7 @@ export class Pokemon {
 
   // POGO
   isShadow: boolean = false;
-  rank: number = 10000;
+  rank: number = 9999;
   counters: any;
   matchups: any;
   rating: number = 0;

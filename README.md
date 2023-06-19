@@ -32,8 +32,3 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## TODO
 
-Nom FR des pokemons
-internationalisation
-table des type
-radar graph des stat
-team builder
