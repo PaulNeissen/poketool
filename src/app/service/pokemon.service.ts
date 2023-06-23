@@ -19,6 +19,7 @@ export class PokemonService {
   public isInit: Subject<boolean> = new Subject<boolean>();
   public moveNames: Map<number, string> = new Map<number, string>();
   public moves: Move[] = [];
+  public leagueError: boolean = false;
 
 
   public pikachus = [10080, 10081, 10082, 10083, 10084, 10085, 10094, 10095, 10096, 10097, 10098, 10099, 10148];
@@ -348,14 +349,20 @@ export class PokemonService {
     return throwError('Something bad happened; please try again later.');
   }
 
+  handleLeagueError(error) {
+    this.leagueError = true;
+    return this.handleError(error);
+  }
+
   getImgCoord(id) {
     return this.imgCoord.find(e => e.id === id);
   }
 
   getTierListData(league: any): Observable<any> {
+    this.leagueError = false;
     const url = this.tierListUrl + league.folder + '/rankings-' + league.value + this.tierListParam; // ex: 1500-halloween
     return this.http.get(url).pipe(
-      catchError(error => this.handleError(error))
+      catchError(error => this.handleLeagueError(error))
     );
   }
 

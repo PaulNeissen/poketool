@@ -27,6 +27,7 @@
             <mat-option *ngFor="let league of leagues" [value]="league">{{ league.name }}</mat-option>
           </mat-select>
         </mat-form-field>
+        <div *ngIf="getLeagueError()" class="league-error">League not available</div>
       </div>
     </div>
     

@@ -26,7 +26,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     {name: 'Great league', value: '1500', folder: 'overall'}, 
     {name: 'Ultra league', value: '2500', folder: 'overall'}, 
     {name: 'Master league', value: '10000', folder: 'overall'},
-    {name: 'Single-Type Cup', value: '1500', folder: 'single'},
+    {name: 'Single-Type Cup', value: '1500-single', folder: 'overall'},
     {name: 'Will Power', value: '1500-willpower', folder: 'overall'},
     {name: 'Great Halloween', value: '1500-halloween', folder: 'overall'},
     {name: 'Ultra Halloween', value: '2500-halloween', folder: 'overall'},
@@ -281,5 +281,9 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   saveTeam() {
     localStorage.setItem('team' + this.modeService.mode, JSON.stringify(this.team));
+  }
+
+  getLeagueError() {
+    return this.pokemonService.leagueError;
   }
 }
