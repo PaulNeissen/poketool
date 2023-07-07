@@ -26,6 +26,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     {name: 'Great league', value: '1500', folder: 'overall'}, 
     {name: 'Ultra league', value: '2500', folder: 'overall'}, 
     {name: 'Master league', value: '10000', folder: 'overall'},
+    {name: 'Retro', value: '1500-retro', folder: 'overall'},
     {name: 'Single-Type Cup', value: '1500-single', folder: 'overall'},
     {name: 'Will Power', value: '1500-willpower', folder: 'overall'},
     {name: 'Great Halloween', value: '1500-halloween', folder: 'overall'},
