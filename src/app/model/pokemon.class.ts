@@ -22,6 +22,7 @@ export class Pokemon {
   spDef: number = 0;
   speed: number = 0;
   total: number = 0;
+  altTotal: number = 0;
 
   // POGO
   isShadow: boolean = false;
@@ -43,6 +44,10 @@ export class Pokemon {
 
   updateTotalStat() {
     this.total = this.hp + this.atk + this.def + this.spAtk + this.spDef + this.speed;
+  }
+
+  updateAltTotalStat() {
+    this.altTotal = Math.max(this.atk, this.spAtk) + this.hp + this.def + this.spDef + this.speed;
   }
 
   updatePogo(data, rank, isShadow, weatherBallType) {
@@ -81,6 +86,7 @@ export class Pokemon {
     this.spDef = pokemon.spDef;
     this.speed = pokemon.speed;
     this.total = pokemon.total;
+    this.altTotal = pokemon.altTotal;
 
     this.isShadow = pokemon.isShadow;
     this.rank = pokemon.rank;

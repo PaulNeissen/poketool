@@ -220,7 +220,7 @@ export class PokemonService {
 
   async initPokemons() {
     if (this.pokemons.length > 0) {
-      // console.log(this.pokemons);
+      //console.log('INIT', this.pokemons);
       await this.delay(100);
       this.isInit.next(true);
       return;

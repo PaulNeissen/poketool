@@ -31,6 +31,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { SideBarTeamComponent } from './side-bar-team/side-bar-team.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CalendarComponent } from './calendar/calendar.component';
+import { SideBarFusionComponent } from './side-bar-fusion/side-bar-fusion.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { CalendarComponent } from './calendar/calendar.component';
     CalendarComponent,
     ComingSoonComponent,
     TeamBuilderComponent,
-    SideBarTeamComponent
+    SideBarTeamComponent,
+    SideBarFusionComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,64 @@
+<div *ngIf="pokemons.length > 1">
+
+  <div class="title-name" fxLayout="row" fxLayoutAlign="space-between center">
+      <div>{{ pokemons[index].name | titlecase}}</div>
+      <div>
+      <img *ngFor="let type of pokemons[index].types" [src]="getTypeSrc(type)">
+      </div>
+      <button mat-mini-fab (click)="swapFusion()">
+        <mat-icon>repeat</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="refreshFusion()">
+        <mat-icon>settings</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="closeDrawer()">
+        <mat-icon>close</mat-icon>
+      </button>
+  </div>
+
+  <div class="stat-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px">
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div class="stat">Total</div>
+      <div class="stat">{{ pokemons[index].total }}</div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div class="stat">Alt Tot</div>
+      <div class="stat">{{ pokemons[index].altTotal }}</div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div class="stat">Hp</div>
+      <div class="stat">{{ pokemons[index].hp }}</div>
+      <div class="bar" [style.width.px]="pokemons[index].hp" [style.background-color]="getBarColor(pokemons[index].hp)"></div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div class="stat">Atk</div>
+      <div class="stat">{{ pokemons[index].atk }}</div>
+      <div class="bar" [style.width.px]="pokemons[index].atk" [style.background-color]="getBarColor(pokemons[index].atk)"></div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div class="stat">Def</div>
+      <div class="stat">{{ pokemons[index].def }}</div>
+      <div class="bar" [style.width.px]="pokemons[index].def" [style.background-color]="getBarColor(pokemons[index].def)"></div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div class="stat">Atk Sp</div>
+      <div class="stat">{{ pokemons[index].spAtk }}</div>
+      <div class="bar" [style.width.px]="pokemons[index].spAtk" [style.background-color]="getBarColor(pokemons[index].spAtk)"></div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div class="stat">Def Sp</div>
+      <div class="stat">{{ pokemons[index].spDef }}</div>
+      <div class="bar" [style.width.px]="pokemons[index].spDef" [style.background-color]="getBarColor(pokemons[index].spDef)"></div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <div class="stat">Speed</div>
+      <div class="stat">{{ pokemons[index].speed }}</div>
+      <div class="bar" [style.width.px]="pokemons[index].speed" [style.background-color]="getBarColor(pokemons[index].speed)"></div>
+    </div>
+  </div>
+
+  <div *ngFor="let resistance of resistances[index]">
+      <app-resistance *ngIf="resistance.resistances.length" [resistance]="resistance"></app-resistance>
+  </div>
+
+</div>

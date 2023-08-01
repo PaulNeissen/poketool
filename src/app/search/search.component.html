@@ -1,15 +1,19 @@
 
 <mat-drawer-container class="drawer-container">
   <mat-drawer #drawer class="drawer mat-elevation-z8" mode="side" position="start">
-    <app-side-bar-pokemon *ngIf="!isSideTeam" [pokemon]="pokemon" (close)="closeDrawer()"></app-side-bar-pokemon>
+    <app-side-bar-pokemon *ngIf="!isSideTeam && !isSideFusion" [pokemon]="pokemon" (close)="closeDrawer()"></app-side-bar-pokemon>
     <app-side-bar-team *ngIf="isSideTeam" [team]="team" (close)="closeDrawer()"></app-side-bar-team>
+    <app-side-bar-fusion *ngIf="isSideFusion" [team]="team" (close)="closeDrawer()"></app-side-bar-fusion>
   </mat-drawer>
 
   <div fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="40px" class="container">
 
-    <button *ngIf="team.length" mat-raised-button (click)="displayTeamStats()">Team Stats</button>
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+      <button *ngIf="team.length" mat-raised-button (click)="displayTeamStats()">Team Stats</button>
+      <button *ngIf="getMode() == 1" mat-raised-button (click)="displayFusion()">Infinite fusion</button>
+    </div>
 
-    <div>
+    <div *ngIf="team.length > 0">
       <app-team-builder [team]="team.slice(0,3)" [opened]="opened" (remove)="removePokemon($event)" (change)="saveTeam()"></app-team-builder>
       <app-team-builder [team]="team.slice(3,6)" [opened]="opened" (remove)="removePokemon($event)" (change)="saveTeam()"></app-team-builder>
     </div>

@@ -21,12 +21,14 @@ export class SearchComponent implements OnInit, AfterViewInit {
   public pokemon: Pokemon | undefined;
   public opened: boolean = false;
   public isSideTeam: boolean = false;
+  public isSideFusion: boolean = false;
   public team: Pokemon[] = [];
   public leagues: any[] = [
     {name: 'Great league', value: '1500', folder: 'overall'}, 
     {name: 'Ultra league', value: '2500', folder: 'overall'}, 
     {name: 'Master league', value: '10000', folder: 'overall'},
     {name: 'Retro', value: '1500-retro', folder: 'overall'},
+    {name: 'Fossil Cup', value: '1500-fossil', folder: 'overall'},
     {name: 'Single-Type Cup', value: '1500-single', folder: 'overall'},
     {name: 'Will Power', value: '1500-willpower', folder: 'overall'},
     {name: 'Great Halloween', value: '1500-halloween', folder: 'overall'},
@@ -76,6 +78,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.pokemonService.initPokemons();
     this.typeService.initType();
 
+    // console.log('MODE', this.modeService.mode);
     let tmpTeam = localStorage.getItem('team' + this.modeService.mode) || '';
     if (localStorage.getItem('team' + this.modeService.mode)) {
       this.team = JSON.parse(tmpTeam);
@@ -209,6 +212,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
     this.drawer.toggle();
     this.opened = false;
     this.isSideTeam = false;
+    this.isSideFusion = false;
     this.pokemon = undefined;
   }
 
@@ -226,7 +230,7 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
       this.team.push(pokemon);
       this.team = this.team.slice();
-      localStorage.setItem('team' + this.modeService.mode, JSON.stringify(this.team));
+      this.saveTeam();
     }
   }
 
@@ -241,10 +245,12 @@ export class SearchComponent implements OnInit, AfterViewInit {
       this.drawer.close();
       this.opened = false;
       this.isSideTeam = false;
+      this.isSideFusion = false;
     } else {
       this.drawer.open();
       this.opened = true;
       this.isSideTeam = true;
+      this.isSideFusion = false;
     }
   }
 
@@ -286,5 +292,18 @@ export class SearchComponent implements OnInit, AfterViewInit {
 
   getLeagueError() {
     return this.pokemonService.leagueError;
+  }
+
+  displayFusion() {
+    if (this.opened && this.isSideFusion) {
+      this.drawer.close();
+      this.opened = false;
+      this.isSideFusion = false;
+    } else {
+      this.drawer.open();
+      this.opened = true;
+      this.isSideFusion = true;
+      this.isSideTeam = false;
+    }
   }
 }

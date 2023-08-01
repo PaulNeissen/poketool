@@ -17,6 +17,6 @@ export class CalendarComponent implements OnInit {
     let month = today.toLocaleString('en-GB', { month: 'long' });
     month = month.charAt(0).toUpperCase() + month.slice(1);
     let year = today.getFullYear();
-    return 'https://gamepress.gg/pokemongo/sites/pokemongo/files/2023-05/June-2023_2.jpg';
+    return 'https://gamepress.gg/pokemongo/sites/pokemongo/files/2023-07/August-2023_0.png';
   }
 }
