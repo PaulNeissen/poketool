@@ -32,6 +32,9 @@ import { SideBarTeamComponent } from './side-bar-team/side-bar-team.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CalendarComponent } from './calendar/calendar.component';
 import { SideBarFusionComponent } from './side-bar-fusion/side-bar-fusion.component';
+import { SearchFusionComponent } from './search-fusion/search-fusion.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -46,7 +49,8 @@ import { SideBarFusionComponent } from './side-bar-fusion/side-bar-fusion.compon
     ComingSoonComponent,
     TeamBuilderComponent,
     SideBarTeamComponent,
-    SideBarFusionComponent
+    SideBarFusionComponent,
+    SearchFusionComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +73,9 @@ import { SideBarFusionComponent } from './side-bar-fusion/side-bar-fusion.compon
     MatCardModule,
     MatOptionModule,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCheckboxModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

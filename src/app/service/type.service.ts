@@ -12,14 +12,14 @@ import { UtilsService } from './utils.service';
 export class TypeService {
 
   //normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost
-  //0           1           2         3         4         5       6     7
+  //  0          1           2        3         4         5       6     7
   //steel', 'fire', 'water', 'grass', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy
   //  8       9       10        11        12          13        14      15      16      17
   public types = ['normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost', 
     'steel', 'fire', 'water', 'grass', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy'];
   public resistanceTitles = ['Immune to', 'Strongly resists', 'Resists', 'Weak to', 'Very weak to'];
-  public multipliers = [1, 25, 50, 200, 400];
-  public multipliersPogo = [1, 0.390625, 0.625, 1, 1.6, 2.56];
+  public multipliers = [0, 25, 50, 200, 400];
+  public multipliersPogo = [0, 0.390625, 0.625, 1, 1.6, 2.56];
   public offensiveTypes: any[][] = [];
   public defensiveTypes: any[][] = [];
   public offensiveTypesPogo: any[][] = [

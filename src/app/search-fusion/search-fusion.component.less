@@ -1,0 +1,97 @@
+@import '../../styles/variables.less';
+
+.mat-progress-bar {
+  width: 50%;
+}
+
+.filter {
+  background-color: @light-grey;
+  width: 300px;
+  height: 60px;
+  padding: 0 20px;
+  color: @white;
+}
+
+.type-filter {
+  max-width: 850px;
+}
+
+table {
+  min-width: 850px;
+}
+
+td, th {
+  min-width: 50px;
+}
+
+tr {
+  min-height: 96px;
+}
+
+.mat-row:hover {
+  background-color: @dark-grey;
+  cursor: pointer;
+}
+
+.large-column {
+  min-width: 80px;
+}
+
+.margin-left {
+  margin-left: 16px;
+}
+
+.padding-left {
+  padding-left: 16px;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.mat-progress-bar {
+  width: 50%;
+}
+
+
+// Mat Table Override
+.mat-table {
+  background-color: @light-grey;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.mat-paginator {
+  background-color: @light-grey;
+}
+
+.mat-cell, .mat-footer-cell {
+  color: @white;
+}
+
+.mat-header-cell {
+  color: @white;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.table-container {
+  padding: 40px;
+
+  ::ng-deep .mat-select-value, .mat-select-arrow, .mat-select-arrow {
+    color: @white;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+    color: @white;
+  }
+
+  ::ng-deep .mat-paginator, .mat-paginator-page-size .mat-select-trigger {
+    color: @white;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  ::ng-deep .mat-select-arrow {
+    color: @white;
+  }
+}

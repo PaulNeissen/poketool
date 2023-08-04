@@ -13,6 +13,7 @@ export class Pokemon {
   evolveTo: number = 0;
   evolveFrom: number = 0;
   evolveChain: number = 0;
+  legendary: boolean = false;
 
   // Stats
   hp: number = 0;
@@ -77,6 +78,7 @@ export class Pokemon {
     this.evolveTo = pokemon.evolveTo;
     this.evolveFrom = pokemon.evolveFrom;
     this.evolveChain = pokemon.evolveChain;
+    this.legendary = pokemon.legendary;
 
     // Stats
     this.hp = pokemon.hp;

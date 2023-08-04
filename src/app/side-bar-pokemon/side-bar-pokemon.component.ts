@@ -29,6 +29,7 @@ export class SideBarPokemonComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.pokemon && changes.pokemon.currentValue) {
       this.resistances = this.typeService.getResistances(changes.pokemon.currentValue.types);
+      console.log('RESISTANCES', this.resistances);
       this.evolutions = this.pokemonService.pokemons.filter(x => x.evolveChain != 0 && x.evolveChain == changes.pokemon.currentValue.evolveChain).sort((a,b) => a.id < b.id ? -1 : 1);
     }
   }

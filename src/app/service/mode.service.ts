@@ -6,8 +6,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ModeService {
 
-  public mode = 1 // POGO = 0, classic = 1
-  private modeSubject = new BehaviorSubject(0);
+  public mode = 1 // POGO = 0, classic = 1, infinite fusion = 2
+  private modeSubject = new BehaviorSubject(1);
   public currentMode = this.modeSubject.asObservable();
 
   constructor() { }

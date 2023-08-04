@@ -58,8 +58,6 @@ export class SideBarFusionComponent implements OnInit {
       this.pokemons.push(this.fusionService.fuse(this.team[1 - this.index], this.team[this.index]));
       this.resistances.push(this.typeService.getResistances(this.pokemons[0].types));
       this.resistances.push(this.typeService.getResistances(this.pokemons[1].types));
-      console.log('RESISTANCES', this.resistances);
-      // TODO: immune to not working
     }
   }
 

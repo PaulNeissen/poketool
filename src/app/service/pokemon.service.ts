@@ -259,6 +259,7 @@ export class PokemonService {
               } else if (tmp[1] === '6') {
                 pokemon.speed = Number(tmp[2]);
                 pokemon.updateTotalStat();
+                pokemon.updateAltTotalStat();
               }
             }
           })
@@ -313,11 +314,14 @@ export class PokemonService {
                       let pokemons = this.pokemons.filter(e => e.specie == +tmp[0]);
                       pokemons.forEach(pokemon => {
                         pokemon.evolveChain = +tmp[4];
+                        if (+tmp[16] == 1 || +tmp[17] == 1) {
+                          pokemon.legendary = true;
+                        }
                       });
                     })
 
-                    console.log("ALL POKEMONS", this.pokemons);
-                    console.log("ALL MOVES", this.moves);
+                    //console.log("ALL POKEMONS", this.pokemons);
+                    //console.log("ALL MOVES", this.moves);
                     this.isInit.next(true);
                   });
                 });

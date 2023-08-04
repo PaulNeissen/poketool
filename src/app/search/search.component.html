@@ -85,7 +85,7 @@
           <ng-container matColumnDef="type">
             <th mat-header-cell *matHeaderCellDef class="padding-left"> Type </th>
             <td mat-cell *matCellDef="let row" [style]="getTypeColumnStyle(row)"> 
-              <img *ngFor="let type of row.types" [src]="getTypeSrc(type)" [ngClass]="{'margin-left': row.types.length === 1}">
+              <img *ngFor="let type of row.types" [src]="getTypeSrc(type)">
             </td>
           </ng-container>
 
